@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (customerProfile(); as customerProfileRef) {
+      <div>
+        <h2 data-cy="customerProfileDetailsHeading">
+          <span jhiTranslate="bikeRentalAppApp.customerProfile.detail.title">Customer Profile</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ customerProfileRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="bikeRentalAppApp.customerProfile.address">Address</span></dt>
+          <dd>
+            <span>{{ customerProfileRef.address }}</span>
+          </dd>
+          <dt><span jhiTranslate="bikeRentalAppApp.customerProfile.city">City</span></dt>
+          <dd>
+            <span>{{ customerProfileRef.city }}</span>
+          </dd>
+          <dt><span jhiTranslate="bikeRentalAppApp.customerProfile.loyaltyPoints">Loyalty Points</span></dt>
+          <dd>
+            <span>{{ customerProfileRef.loyaltyPoints }}</span>
+          </dd>
+          <dt><span jhiTranslate="bikeRentalAppApp.customerProfile.verified">Verified</span></dt>
+          <dd>
+            <span>{{ customerProfileRef.verified }}</span>
+          </dd>
+          <dt><span jhiTranslate="bikeRentalAppApp.customerProfile.customer">Customer</span></dt>
+          <dd>
+            @if (customerProfile()!.customer) {
+              <div>
+                <a [routerLink]="['/customer', customerProfile()!.customer?.id, 'view']">{{ customerProfileRef.customer?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/customer-profile', customerProfileRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

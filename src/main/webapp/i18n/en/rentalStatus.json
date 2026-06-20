@@ -1,0 +1,10 @@
+{
+  "bikeRentalAppApp": {
+    "RentalStatus": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "FINISHED": "FINISHED",
+      "CANCELLED": "CANCELLED"
+    }
+  }
+}

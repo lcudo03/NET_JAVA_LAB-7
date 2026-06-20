@@ -1,0 +1,31 @@
+{
+  "bikeRentalAppApp": {
+    "bike": {
+      "home": {
+        "title": "Bikes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Bike",
+        "createOrEditLabel": "Create or edit a Bike",
+        "notFound": "No Bikes found"
+      },
+      "created": "A new Bike is created with identifier {{ param }}",
+      "updated": "A Bike is updated with identifier {{ param }}",
+      "deleted": "A Bike is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Bike {{ id }}?"
+      },
+      "detail": {
+        "title": "Bike"
+      },
+      "id": "ID",
+      "name": "Name",
+      "serialNumber": "Serial Number",
+      "bikeType": "Bike Type",
+      "pricePerHour": "Price Per Hour",
+      "available": "Available",
+      "productionDate": "Production Date",
+      "rentals": "Rentals",
+      "categories": "Categories"
+    }
+  }
+}

@@ -1,0 +1,150 @@
+<div>
+  <h2 id="page-heading" data-cy="CustomerProfileHeading">
+    <span jhiTranslate="bikeRentalAppApp.customerProfile.home.title">Customer Profiles</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
+        <span jhiTranslate="bikeRentalAppApp.customerProfile.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-customer-profile"
+        [routerLink]="['/customer-profile/new']"
+      >
+        <fa-icon icon="plus" />
+        <span jhiTranslate="bikeRentalAppApp.customerProfile.home.createLabel">Create a new Customer Profile</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (customerProfiles().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="bikeRentalAppApp.customerProfile.home.notFound">No Customer Profiles found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="address">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.customerProfile.address">Address</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="city">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.customerProfile.city">City</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="loyaltyPoints">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.customerProfile.loyaltyPoints">Loyalty Points</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="verified">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.customerProfile.verified">Verified</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="customer.id">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.customerProfile.customer">Customer</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (customerProfile of customerProfiles(); track trackId(customerProfile)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/customer-profile', customerProfile.id, 'view']">{{ customerProfile.id }}</a>
+              </td>
+              <td>{{ customerProfile.address }}</td>
+              <td>{{ customerProfile.city }}</td>
+              <td>{{ customerProfile.loyaltyPoints }}</td>
+              <td>{{ customerProfile.verified }}</td>
+              <td>
+                @if (customerProfile.customer) {
+                  <div>
+                    <a [routerLink]="['/customer', customerProfile.customer.id, 'view']">{{ customerProfile.customer.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/customer-profile', customerProfile.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/customer-profile', customerProfile.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(customerProfile)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (customerProfiles().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems()"
+          [page]="page()"
+          [pageSize]="itemsPerPage()"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        />
+      </div>
+    </div>
+  }
+</div>

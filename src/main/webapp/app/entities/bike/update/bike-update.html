@@ -1,0 +1,170 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-bike-heading" data-cy="BikeCreateUpdateHeading" jhiTranslate="bikeRentalAppApp.bike.home.createOrEditLabel">
+        Create or edit a Bike
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="global.field.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let nameRef = editForm.get('name')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_name" jhiTranslate="bikeRentalAppApp.bike.name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          @if (nameRef.invalid && (nameRef.dirty || nameRef.touched)) {
+            <div>
+              @if (editForm.get('name')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('name')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '80' }"
+                  >This field cannot be longer than 80 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let serialNumberRef = editForm.get('serialNumber')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_serialNumber" jhiTranslate="bikeRentalAppApp.bike.serialNumber">Serial Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serialNumber"
+            id="field_serialNumber"
+            data-cy="serialNumber"
+            formControlName="serialNumber"
+          />
+          @if (serialNumberRef.invalid && (serialNumberRef.dirty || serialNumberRef.touched)) {
+            <div>
+              @if (editForm.get('serialNumber')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let bikeTypeRef = editForm.get('bikeType')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_bikeType" jhiTranslate="bikeRentalAppApp.bike.bikeType">Bike Type</label>
+          <select class="form-control" name="bikeType" formControlName="bikeType" id="field_bikeType" data-cy="bikeType">
+            <option [ngValue]="null">{{ 'bikeRentalAppApp.BikeType.null' | translate }}</option>
+            @for (bikeType of bikeTypeValues; track $index) {
+              <option [value]="bikeType">{{ 'bikeRentalAppApp.BikeType.' + bikeType | translate }}</option>
+            }
+          </select>
+          @if (bikeTypeRef.invalid && (bikeTypeRef.dirty || bikeTypeRef.touched)) {
+            <div>
+              @if (editForm.get('bikeType')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let pricePerHourRef = editForm.get('pricePerHour')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_pricePerHour" jhiTranslate="bikeRentalAppApp.bike.pricePerHour">Price Per Hour</label>
+          <input
+            type="number"
+            class="form-control"
+            name="pricePerHour"
+            id="field_pricePerHour"
+            data-cy="pricePerHour"
+            formControlName="pricePerHour"
+          />
+          @if (pricePerHourRef.invalid && (pricePerHourRef.dirty || pricePerHourRef.touched)) {
+            <div>
+              @if (editForm.get('pricePerHour')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('pricePerHour')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >This field should be at least 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('pricePerHour')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >This field should be a number.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let availableRef = editForm.get('available')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_available" jhiTranslate="bikeRentalAppApp.bike.available">Available</label>
+          <input type="checkbox" class="form-check" name="available" id="field_available" data-cy="available" formControlName="available" />
+          @if (availableRef.invalid && (availableRef.dirty || availableRef.touched)) {
+            <div>
+              @if (editForm.get('available')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_productionDate" jhiTranslate="bikeRentalAppApp.bike.productionDate">Production Date</label>
+          <div class="input-group">
+            <input
+              id="field_productionDate"
+              data-cy="productionDate"
+              type="text"
+              class="form-control"
+              name="productionDate"
+              ngbDatepicker
+              #productionDateDp="ngbDatepicker"
+              formControlName="productionDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="productionDateDp.toggle()"><fa-icon icon="calendar-alt" /></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="field_categorieses" jhiTranslate="bikeRentalAppApp.bike.categories">Categories</label>
+          <select
+            class="form-control"
+            id="field_categorieses"
+            data-cy="categories"
+            multiple
+            name="categorieses"
+            formControlName="categorieses"
+            [compareWith]="compareCategory"
+          >
+            @for (categoryOption of categoriesSharedCollection(); track $index) {
+              <option [ngValue]="categoryOption">{{ categoryOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban" />&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving()"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save" />&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

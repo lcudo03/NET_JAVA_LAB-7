@@ -1,0 +1,28 @@
+{
+  "bikeRentalAppApp": {
+    "customerProfile": {
+      "home": {
+        "title": "Customer Profiles",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Customer Profile",
+        "createOrEditLabel": "Create or edit a Customer Profile",
+        "notFound": "No Customer Profiles found"
+      },
+      "created": "A new Customer Profile is created with identifier {{ param }}",
+      "updated": "A Customer Profile is updated with identifier {{ param }}",
+      "deleted": "A Customer Profile is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Customer Profile {{ id }}?"
+      },
+      "detail": {
+        "title": "Customer Profile"
+      },
+      "id": "ID",
+      "address": "Address",
+      "city": "City",
+      "loyaltyPoints": "Loyalty Points",
+      "verified": "Verified",
+      "customer": "Customer"
+    }
+  }
+}

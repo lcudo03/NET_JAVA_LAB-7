@@ -41,11 +41,14 @@
         <checkstyle.version>13.4.2</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <commons-beanutils.version>1.11.0</commons-beanutils.version>
+        <commons-io.version>2.21.0</commons-io.version>
+        <commons-text.version>1.13.1</commons-text.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
         <frontend-maven-plugin.version>2.0.0</frontend-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <jhipster-framework.version>8.12.0</jhipster-framework.version>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
-        <jib-maven-plugin.image>eclipse-temurin:25-jre-noble</jib-maven-plugin.image>
+        <jib-maven-plugin.image>eclipse-temurin:21-jre-noble</jib-maven-plugin.image>
         <jib-maven-plugin.version>3.5.1</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <liquibase-plugin.password/>
@@ -69,6 +72,27 @@
         <spring.profiles.active>dev</spring.profiles.active>
         <springdoc-openapi-starter-webflux-api.version>2.8.15</springdoc-openapi-starter-webflux-api.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Wymuszenie jednej wersji zależności zgłaszanych przez Maven Enforcer -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb-api.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>

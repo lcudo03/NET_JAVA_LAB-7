@@ -1,0 +1,69 @@
+enum BikeType {
+  CITY,
+  MOUNTAIN,
+  ROAD,
+  ELECTRIC
+}
+
+enum RentalStatus {
+  ACTIVE,
+  FINISHED,
+  CANCELLED
+}
+
+entity Customer {
+  firstName String required minlength(2) maxlength(50)
+  lastName String required minlength(2) maxlength(50)
+  email String required unique
+  phoneNumber String maxlength(20)
+  registrationDate LocalDate required
+}
+
+entity CustomerProfile {
+  address String required maxlength(150)
+  city String required maxlength(80)
+  loyaltyPoints Integer min(0)
+  verified Boolean required
+}
+
+entity Bike {
+  name String required maxlength(80)
+  serialNumber String required unique
+  bikeType BikeType required
+  pricePerHour Float required min(0)
+  available Boolean required
+  productionDate LocalDate
+}
+
+entity Rental {
+  startDate LocalDate required
+  endDate LocalDate
+  totalPrice Float min(0)
+  status RentalStatus required
+}
+
+entity Category {
+  name String required unique maxlength(60)
+  description String maxlength(255)
+}
+
+relationship OneToOne {
+  CustomerProfile{customer required} to Customer{profile}
+}
+
+relationship OneToMany {
+  Customer{rentals} to Rental{customer required}
+  Bike{rentals} to Rental{bike required}
+}
+
+relationship ManyToMany {
+  Bike{categories} to Category{bikes}
+}
+
+paginate Customer, CustomerProfile, Bike, Rental, Category with pagination
+
+service Customer, CustomerProfile, Bike, Rental, Category with serviceClass
+
+dto Customer, CustomerProfile, Bike, Rental, Category with mapstruct
+
+filter Customer, CustomerProfile, Bike, Rental, Category

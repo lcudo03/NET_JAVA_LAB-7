@@ -1,0 +1,162 @@
+<div>
+  <h2 id="page-heading" data-cy="BikeHeading">
+    <span jhiTranslate="bikeRentalAppApp.bike.home.title">Bikes</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
+        <span jhiTranslate="bikeRentalAppApp.bike.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-bike"
+        [routerLink]="['/bike/new']"
+      >
+        <fa-icon icon="plus" />
+        <span jhiTranslate="bikeRentalAppApp.bike.home.createLabel">Create a new Bike</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (bikes().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="bikeRentalAppApp.bike.home.notFound">No Bikes found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="name">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.bike.name">Name</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="serialNumber">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.bike.serialNumber">Serial Number</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bikeType">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.bike.bikeType">Bike Type</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="pricePerHour">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.bike.pricePerHour">Price Per Hour</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="available">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.bike.available">Available</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="productionDate">
+              <div class="d-flex">
+                <span jhiTranslate="bikeRentalAppApp.bike.productionDate">Production Date</span>
+
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (bike of bikes(); track trackId(bike)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/bike', bike.id, 'view']">{{ bike.id }}</a>
+              </td>
+              <td>{{ bike.name }}</td>
+              <td>{{ bike.serialNumber }}</td>
+              <td [jhiTranslate]="'bikeRentalAppApp.BikeType.' + (bike.bikeType ?? 'null')">
+                {{ { null: '', CITY: 'CITY', MOUNTAIN: 'MOUNTAIN', ROAD: 'ROAD', ELECTRIC: 'ELECTRIC' }[bike.bikeType ?? 'null'] }}
+              </td>
+              <td>{{ bike.pricePerHour }}</td>
+              <td>{{ bike.available }}</td>
+              <td>{{ bike.productionDate | formatMediumDate }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <button
+                    type="submit"
+                    [routerLink]="['/rental']"
+                    [queryParams]="{ 'filter[bikeId.in]': bike.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye" />
+                    <span
+                      class="d-none d-md-inline"
+                      jhiTranslate="entity.action.show"
+                      [translateValues]="{ otherEntity: ('bikeRentalAppApp.bike.rentals' | translate) }"
+                      >Show Rentals</span
+                    >
+                  </button>
+                  <a [routerLink]="['/bike', bike.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/bike', bike.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(bike)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (bikes().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems()"
+          [page]="page()"
+          [pageSize]="itemsPerPage()"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        />
+      </div>
+    </div>
+  }
+</div>

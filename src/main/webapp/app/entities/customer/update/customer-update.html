@@ -1,0 +1,144 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-customer-heading" data-cy="CustomerCreateUpdateHeading" jhiTranslate="bikeRentalAppApp.customer.home.createOrEditLabel">
+        Create or edit a Customer
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="global.field.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let firstNameRef = editForm.get('firstName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_firstName" jhiTranslate="bikeRentalAppApp.customer.firstName">First Name</label>
+          <input type="text" class="form-control" name="firstName" id="field_firstName" data-cy="firstName" formControlName="firstName" />
+          @if (firstNameRef.invalid && (firstNameRef.dirty || firstNameRef.touched)) {
+            <div>
+              @if (editForm.get('firstName')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('firstName')?.errors?.minlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: '2' }"
+                  >This field is required to be at least 2 characters.</small
+                >
+              }
+              @if (editForm.get('firstName')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
+                  >This field cannot be longer than 50 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let lastNameRef = editForm.get('lastName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_lastName" jhiTranslate="bikeRentalAppApp.customer.lastName">Last Name</label>
+          <input type="text" class="form-control" name="lastName" id="field_lastName" data-cy="lastName" formControlName="lastName" />
+          @if (lastNameRef.invalid && (lastNameRef.dirty || lastNameRef.touched)) {
+            <div>
+              @if (editForm.get('lastName')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('lastName')?.errors?.minlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: '2' }"
+                  >This field is required to be at least 2 characters.</small
+                >
+              }
+              @if (editForm.get('lastName')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
+                  >This field cannot be longer than 50 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let emailRef = editForm.get('email')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_email" jhiTranslate="bikeRentalAppApp.customer.email">Email</label>
+          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+          @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
+            <div>
+              @if (editForm.get('email')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let phoneNumberRef = editForm.get('phoneNumber')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_phoneNumber" jhiTranslate="bikeRentalAppApp.customer.phoneNumber">Phone Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="phoneNumber"
+            id="field_phoneNumber"
+            data-cy="phoneNumber"
+            formControlName="phoneNumber"
+          />
+          @if (phoneNumberRef.invalid && (phoneNumberRef.dirty || phoneNumberRef.touched)) {
+            <div>
+              @if (editForm.get('phoneNumber')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '20' }"
+                  >This field cannot be longer than 20 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let registrationDateRef = editForm.get('registrationDate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_registrationDate" jhiTranslate="bikeRentalAppApp.customer.registrationDate"
+            >Registration Date</label
+          >
+          <div class="input-group">
+            <input
+              id="field_registrationDate"
+              data-cy="registrationDate"
+              type="text"
+              class="form-control"
+              name="registrationDate"
+              ngbDatepicker
+              #registrationDateDp="ngbDatepicker"
+              formControlName="registrationDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="registrationDateDp.toggle()"><fa-icon icon="calendar-alt" /></button>
+          </div>
+          @if (registrationDateRef.invalid && (registrationDateRef.dirty || registrationDateRef.touched)) {
+            <div>
+              @if (editForm.get('registrationDate')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban" />&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving()"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save" />&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
